@@ -2,6 +2,7 @@ package bok.bot;
 
 import bok.board.QueensBoard;
 import bok.engine.board.interfaces.Board;
+import bok.engine.board.interfaces.Piece;
 import bok.engine.game2d.Move;
 
 import java.util.HashMap;
@@ -14,8 +15,8 @@ public class MinMaxBot implements Bot{
        List<Move> possibleMoves = board.getPossibleMoves();
        HashMap<Move,Integer> moveValue = new HashMap<>();
         for (Move move : possibleMoves) {
-            Board board1 = board.clone();
-            board1.handleInput(move.getX(), move.getX());
+            QueensBoard board1 = new QueensBoard(board.getPossibleMoves(), board.getWidth(), board.getHeight());
+            board1.removeMoves(move.getX(), move.getX());
             moveValue.put(move, minimax(board1, 0, false));
         }
         Move bestMove = null;
@@ -28,6 +29,19 @@ public class MinMaxBot implements Bot{
         }
         return bestMove;
     }
+
+    private Piece[][] cloneBoard(Piece[][] pieces) {
+        Piece [][] p = new Piece[pieces.length][];
+        for(int i = 0; i < pieces.length; i++)
+        {
+            Piece[] aMatrix = pieces[i];
+            int aLength = aMatrix.length;
+            p[i] = new Piece[aLength];
+            System.arraycopy(aMatrix, 0, p[i], 0, aLength);
+        }
+        return p;
+    }
+
     public final int WINSCORE = 30;
     public final int LOSESCORE = -30;
 
@@ -43,16 +57,16 @@ public class MinMaxBot implements Bot{
         if (isMaximizingPlayer){
             int best = -1000;
             for (Move move: board.getPossibleMoves()){
-                Board board1 = board.clone();
-                board1.handleInput(move.getX(), move.getY());
+                QueensBoard board1 = new QueensBoard(board.getPossibleMoves(), board.getWidth(), board.getHeight());
+                board1.removeMoves(move.getX(), move.getX());
                 best = Math.max(best, minimax(board1, depth+1, false));
             }
             return best;
         }else{
             int best = 1000;
             for (Move move: board.getPossibleMoves()){
-                Board board1 = board.clone();
-                board1.handleInput(move.getX(), move.getY());
+                QueensBoard board1 = new QueensBoard(board.getPossibleMoves(), board.getWidth(), board.getHeight());
+                board1.removeMoves(move.getX(), move.getX());
                 best = Math.min(best, minimax(board1, depth+1, false));
             }
             return best;
@@ -60,10 +74,6 @@ public class MinMaxBot implements Bot{
 
     }
 
-    @Override
-    public Move play(QueensBoard board) {
-        return null;
-    }
 
 //    function minimax(board, depth, isMaximizingPlayer):
 //

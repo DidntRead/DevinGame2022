@@ -16,6 +16,11 @@ public class QueensBoard extends Board {
     private int player = 0;
     private Bot bot;
 
+    public QueensBoard(List<Move> possibleMoves,int width, int height){
+        this.setPossibleMoves(possibleMoves);
+
+    }
+
     public QueensBoard(){
 
         Move boardSize = ValidatedInput.getValidatedBoardSize();
@@ -44,7 +49,7 @@ public class QueensBoard extends Board {
     public void handleInput(int x, int y) {
         if (this.getPossibleMoves().contains(new Move(x,y))){
             this.makeMove(x,y);
-            if (bot != null){
+            if (bot != null && !this.isGameWon()){
                 this.botPlay();
             }
         }else{
@@ -57,19 +62,20 @@ public class QueensBoard extends Board {
         this.makeMove(move.getX(),move.getY());
     }
 
-    private void makeMove(int x, int y){
+    @Override
+    public void makeMove(int x, int y){
         Queen queen = new Queen(this, this.player%2==0? Color.GREEN: Color.RED, this.player);
         queen.setAnimation(new SpawnAnimation());
         this.setPiece(queen,x,y);
         this.removeMoves(x, y);
-    if (this.getPossibleMoves().size() == 0){
+        if (this.getPossibleMoves().size() == 0){
             this.setWinner("Player " + (this.player + 1));
             return;
         }
         this.changePlayer();
     }
 
-    private void removeMoves(int x, int y) {
+    public void removeMoves(int x, int y) {
         List<Move> moves = this.getPossibleMoves().stream().filter(move -> {
            return move.getX() != x && move.getY() != y && Math.abs(move.getX() - x) != Math.abs(move.getY() - y);
         }).collect(Collectors.toList());
