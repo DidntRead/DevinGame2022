@@ -17,7 +17,7 @@ import java.util.Objects;
 public class Queen extends Piece {
     public Queen(Board board, Color color, int player) {
         super(board, color, player);
-        getForm().setScale(0.5f);
+        getForm().setScale(0.35f);
         getForm().setRotation((float) Math.toRadians(90), 0, 0);
     }
 

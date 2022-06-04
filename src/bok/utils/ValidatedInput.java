@@ -24,6 +24,10 @@ public class ValidatedInput {
                     continue;
                 int x = Integer.parseInt(num[0]);
                 int y = Integer.parseInt(num[1]);
+                if (x < 3 || y < 3 || x > 100 || y > 100){
+                    JOptionPane.showMessageDialog(null,"M and N should be between 3 and 100", "Invalid Board Size!",JOptionPane.ERROR_MESSAGE);
+                    continue;
+                }
                 return new Move(x,y);
             }catch (Exception ignored){}
         }

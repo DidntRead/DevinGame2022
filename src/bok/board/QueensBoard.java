@@ -31,10 +31,6 @@ public class QueensBoard extends Board {
         this.setPossibleMoves(possibleMoves);
     }
 
-    @Override
-    protected void initPieces() {
-
-    }
 
     @Override
     public void handleInput(int x, int y) {
@@ -45,6 +41,7 @@ public class QueensBoard extends Board {
             this.removeMoves(x, y);
             if (this.getPossibleMoves().size() == 0){
                 this.setWinner("Player " + (this.player + 1));
+                return;
             }
             this.changePlayer();
         }
@@ -60,5 +57,10 @@ public class QueensBoard extends Board {
     @Override
     public void changePlayer() {
         this.player = (this.player + 1) % 2;
+    }
+
+    @Override
+    public String getPlayerOnTurn() {
+        return "Player" + (this.player + 1);
     }
 }
