@@ -57,7 +57,7 @@ public class QueensBoard extends Board {
         this.makeMove(move.getX(),move.getY());
     }
 
-    private void makeMove(int x, int y){
+    public void makeMove(int x, int y){
         Queen queen = new Queen(this, this.player%2==0? Color.GREEN: Color.RED, this.player);
         queen.setAnimation(new SpawnAnimation());
         this.setPiece(queen,x,y);
