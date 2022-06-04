@@ -8,6 +8,7 @@ import bok.engine.game2d.Move;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class MinMaxBot implements Bot{
 
@@ -15,12 +16,15 @@ public class MinMaxBot implements Bot{
        List<Move> possibleMoves = board.getPossibleMoves();
        HashMap<Move,Integer> moveValue = new HashMap<>();
         for (Move move : possibleMoves) {
-            QueensBoard board1 = new QueensBoard(board.getPossibleMoves(), board.getWidth(), board.getHeight());
+            QueensBoard board1 = new QueensBoard(board.getPossibleMoves());
             board1.removeMoves(move.getX(), move.getX());
             moveValue.put(move, minimax(board1, 0, false));
         }
-        Move bestMove = null;
-        int bestMoveValue = -1000;
+        Optional<Map.Entry<Move, Integer>> firstMove = moveValue.entrySet().stream().findFirst();
+        if (!firstMove.isPresent())
+            throw new RuntimeException("No moves");
+        Move bestMove = firstMove.get().getKey();
+        int bestMoveValue = firstMove.get().getValue();
         for(Map.Entry<Move,Integer> entry: moveValue.entrySet()){
             if (bestMoveValue < entry.getValue()){
                 bestMoveValue = entry.getValue();
@@ -47,30 +51,30 @@ public class MinMaxBot implements Bot{
 
     public int minimax(Board board, int depth, boolean isMaximizingPlayer){
         if (board.isGameWon()){
-            return (isMaximizingPlayer ? LOSESCORE : WINSCORE) + depth;
+            return (isMaximizingPlayer ? LOSESCORE + depth : WINSCORE - depth);
         }
 
         if(depth == 5){
             return 0;
         }
 
+        int best;
         if (isMaximizingPlayer){
-            int best = -1000;
+            best = -1000;
             for (Move move: board.getPossibleMoves()){
-                QueensBoard board1 = new QueensBoard(board.getPossibleMoves(), board.getWidth(), board.getHeight());
+                QueensBoard board1 = new QueensBoard(board.getPossibleMoves());
                 board1.removeMoves(move.getX(), move.getX());
                 best = Math.max(best, minimax(board1, depth+1, false));
             }
-            return best;
         }else{
-            int best = 1000;
+            best = 1000;
             for (Move move: board.getPossibleMoves()){
-                QueensBoard board1 = new QueensBoard(board.getPossibleMoves(), board.getWidth(), board.getHeight());
+                QueensBoard board1 = new QueensBoard(board.getPossibleMoves());
                 board1.removeMoves(move.getX(), move.getX());
-                best = Math.min(best, minimax(board1, depth+1, false));
+                best = Math.min(best, minimax(board1, depth+1, true));
             }
-            return best;
         }
+        return best;
 
     }
 

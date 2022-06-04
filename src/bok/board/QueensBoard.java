@@ -4,9 +4,12 @@ import bok.animation.SpawnAnimation;
 import bok.bot.Bot;
 import bok.bot.MinMaxBot;
 import bok.engine.board.interfaces.Board;
+import bok.engine.game2d.Game2D;
 import bok.engine.game2d.Move;
+import bok.engine.game3d.Game3D;
 import bok.utils.ValidatedInput;
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,21 +19,34 @@ public class QueensBoard extends Board {
     private int player = 0;
     private Bot bot;
 
-    public QueensBoard(List<Move> possibleMoves,int width, int height){
-        this.setPossibleMoves(possibleMoves);
-
+    public QueensBoard(List<Move> possibleMoves){
+        List<Move> mv = new ArrayList<>(possibleMoves.size());
+        possibleMoves.forEach((move -> mv.add(new Move(move.getX(), move.getY()))));
+        this.setPossibleMoves(mv);
     }
 
     public QueensBoard(){
-
         Move boardSize = ValidatedInput.getValidatedBoardSize();
-        this.askToPlayVsBot();
         super.initBoard(boardSize.getX(), boardSize.getY());
         this.initPossibleMoves();
+        this.askToPlayVsBot();
     }
 
     private void askToPlayVsBot() {
-        this.bot = new MinMaxBot();
+        int option = JOptionPane.showOptionDialog(null, "Choose to play vs human or bot", "Playing Mode", JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE, null, new String[]{"PvP", "PvsBot"}, "2D");
+        switch (option) {
+            case 0:
+                return;
+            case 1:
+                this.bot = new MinMaxBot();
+//                this.botPlay();
+                return;
+            default:
+                System.exit(0);
+
+        }
+
     }
 
     private void initPossibleMoves() {
@@ -52,8 +68,6 @@ public class QueensBoard extends Board {
             if (bot != null && !this.isGameWon()){
                 this.botPlay();
             }
-        }else{
-            System.out.println("Wrong fdsa");
         }
     }
 
@@ -69,7 +83,7 @@ public class QueensBoard extends Board {
         this.setPiece(queen,x,y);
         this.removeMoves(x, y);
         if (this.getPossibleMoves().size() == 0){
-            this.setWinner("Player " + (this.player + 1));
+            this.setWinner(this.getPlayerOnTurn());
             return;
         }
         this.changePlayer();
@@ -89,7 +103,7 @@ public class QueensBoard extends Board {
 
     @Override
     public String getPlayerOnTurn() {
-        return "Player" + (this.player + 1);
+        return bot==null ? "Player" + (this.player + 1) : player==0 ? "Player" : "Bot" ;
     }
 
     @Override
