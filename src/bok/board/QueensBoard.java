@@ -1,5 +1,6 @@
 package bok.board;
 
+import bok.animation.SpawnAnimation;
 import bok.engine.board.interfaces.Board;
 import bok.engine.game2d.Move;
 import bok.utils.ValidatedInput;
@@ -39,6 +40,7 @@ public class QueensBoard extends Board {
     public void handleInput(int x, int y) {
         if (this.getPossibleMoves().contains(new Move(x,y))){
             Queen queen = new Queen(this, this.player%2==0? Color.GREEN: Color.RED, this.player);
+            queen.setAnimation(new SpawnAnimation());
             this.setPiece(queen,x,y);
             this.removeMoves(x, y);
             if (this.getPossibleMoves().size() == 0){
