@@ -24,14 +24,14 @@ public class SpawnAnimation implements AnimationInterface {
 
     @Override
     public void returnAnimation(Graphics2D g, int boxSize, int x, int y) {
-        g.rotate(- this.rotation, x + (float)boxSize / 2, y + (float)boxSize / 2);
+        g.rotate( -this.rotation, x + (float)boxSize / 2, y + (float)boxSize / 2);
 
     }
 
     @Override
     public void animate3D(Matrix4f matrix4f) {
         matrix4f.scale((float) Math.pow(percentDone(), 2));
-        matrix4f.m32(this.JUMPHIGN - this.JUMPHIGN *(float) Math.sqrt( percentDone()));
+        matrix4f.m32(this.JUMPHIGN - this.JUMPHIGN * (float) Math.sqrt(percentDone()));
     }
 
     private double percentDone(){

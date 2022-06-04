@@ -40,7 +40,7 @@ public class QueensBoard extends Board {
                 return;
             case 1:
                 this.bot = new MinMaxBot();
-//                this.botPlay();
+                this.botPlay();
                 return;
             default:
                 System.exit(0);

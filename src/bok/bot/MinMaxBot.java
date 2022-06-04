@@ -50,7 +50,7 @@ public class MinMaxBot implements Bot{
     public final int LOSESCORE = -30;
 
     public int minimax(Board board, int depth, boolean isMaximizingPlayer){
-        if (board.isGameWon()){
+        if (board.getPossibleMoves().size() == 0){
             return (isMaximizingPlayer ? LOSESCORE + depth : WINSCORE - depth);
         }
 
@@ -64,14 +64,14 @@ public class MinMaxBot implements Bot{
             for (Move move: board.getPossibleMoves()){
                 QueensBoard board1 = new QueensBoard(board.getPossibleMoves());
                 board1.removeMoves(move.getX(), move.getX());
-                best = Math.max(best, minimax(board1, depth+1, false));
+                best = Math.max(best, minimax(board1, depth+1, !isMaximizingPlayer));
             }
         }else{
             best = 1000;
             for (Move move: board.getPossibleMoves()){
                 QueensBoard board1 = new QueensBoard(board.getPossibleMoves());
                 board1.removeMoves(move.getX(), move.getX());
-                best = Math.min(best, minimax(board1, depth+1, true));
+                best = Math.min(best, minimax(board1, depth+1, !isMaximizingPlayer));
             }
         }
         return best;
