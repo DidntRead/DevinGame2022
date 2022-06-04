@@ -28,7 +28,7 @@ public class Queen extends Piece {
 
     @Override
     protected ModelData loadModelData() {
-        return OBJFileLoader.loadOBJ("/queen.obj");
+        return OBJFileLoader.loadOBJ("/pawn.obj");
     }
 
     @Override

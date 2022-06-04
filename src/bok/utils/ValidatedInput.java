@@ -6,7 +6,7 @@ import javax.swing.*;
 
 public class ValidatedInput {
 
-    public static Move getValidatedInt(){
+    public static Move getValidatedBoardSize(){
         while (true){
             String s = (String) JOptionPane.showInputDialog(
                     null,

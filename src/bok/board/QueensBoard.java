@@ -2,6 +2,7 @@ package bok.board;
 
 import bok.engine.board.interfaces.Board;
 import bok.engine.game2d.Move;
+import bok.utils.ValidatedInput;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -13,8 +14,8 @@ public class QueensBoard extends Board {
 
     public QueensBoard(){
 
-        int m=0,n=0;
-        super.initBoard(m,n);
+        Move boardSize = ValidatedInput.getValidatedBoardSize();
+        super.initBoard(boardSize.getX(), boardSize.getY());
         this.initPossibleMoves();
     }
 
@@ -41,7 +42,7 @@ public class QueensBoard extends Board {
             this.setPiece(queen,x,y);
             this.removeMoves(x, y);
             if (this.getPossibleMoves().size() == 0){
-                this.setWinner("Player" + this.player);
+                this.setWinner("Player " + (this.player + 1));
             }
             this.changePlayer();
         }
