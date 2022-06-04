@@ -1,5 +1,6 @@
 package bok.bot;
 
+import bok.board.QueensBoard;
 import bok.engine.board.interfaces.Board;
 import bok.engine.game2d.Move;
 
@@ -7,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MinMaxBot {
+public class MinMaxBot implements Bot{
 
     public Move play(Board board){
        List<Move> possibleMoves = board.getPossibleMoves();
@@ -57,6 +58,11 @@ public class MinMaxBot {
             return best;
         }
 
+    }
+
+    @Override
+    public Move play(QueensBoard board) {
+        return null;
     }
 
 //    function minimax(board, depth, isMaximizingPlayer):

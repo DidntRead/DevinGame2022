@@ -1,6 +1,8 @@
 package bok.board;
 
 import bok.animation.SpawnAnimation;
+import bok.bot.Bot;
+import bok.bot.MinMaxBot;
 import bok.engine.board.interfaces.Board;
 import bok.engine.game2d.Move;
 import bok.utils.ValidatedInput;
@@ -12,12 +14,18 @@ import java.util.stream.Collectors;
 
 public class QueensBoard extends Board {
     private int player = 0;
+    private Bot bot;
 
     public QueensBoard(){
 
         Move boardSize = ValidatedInput.getValidatedBoardSize();
+        this.askToPlayVsBot();
         super.initBoard(boardSize.getX(), boardSize.getY());
         this.initPossibleMoves();
+    }
+
+    private void askToPlayVsBot() {
+        this.bot = new MinMaxBot();
     }
 
     private void initPossibleMoves() {
@@ -35,16 +43,30 @@ public class QueensBoard extends Board {
     @Override
     public void handleInput(int x, int y) {
         if (this.getPossibleMoves().contains(new Move(x,y))){
-            Queen queen = new Queen(this, this.player%2==0? Color.GREEN: Color.RED, this.player);
-            queen.setAnimation(new SpawnAnimation());
-            this.setPiece(queen,x,y);
-            this.removeMoves(x, y);
-            if (this.getPossibleMoves().size() == 0){
-                this.setWinner("Player " + (this.player + 1));
-                return;
+            this.makeMove(x,y);
+            if (bot != null){
+                this.botPlay();
             }
-            this.changePlayer();
+        }else{
+            System.out.println("Wrong fdsa");
         }
+    }
+
+    private void botPlay() {
+        Move move = this.bot.play(this);
+        this.makeMove(move.getX(),move.getY());
+    }
+
+    private void makeMove(int x, int y){
+        Queen queen = new Queen(this, this.player%2==0? Color.GREEN: Color.RED, this.player);
+        queen.setAnimation(new SpawnAnimation());
+        this.setPiece(queen,x,y);
+        this.removeMoves(x, y);
+    if (this.getPossibleMoves().size() == 0){
+            this.setWinner("Player " + (this.player + 1));
+            return;
+        }
+        this.changePlayer();
     }
 
     private void removeMoves(int x, int y) {
@@ -62,5 +84,10 @@ public class QueensBoard extends Board {
     @Override
     public String getPlayerOnTurn() {
         return "Player" + (this.player + 1);
+    }
+
+    @Override
+    public String getGameInstructions() {
+        return null;
     }
 }
