@@ -88,6 +88,15 @@ public class QueensBoard extends Board {
 
     @Override
     public String getGameInstructions() {
-        return null;
+
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("\n");
+        builder.append("Queens:\n");
+        builder.append("Queens is a game played on a MxN sized board from 2 players.\n");
+        builder.append("Taking turns each player decides where to place a new queen,\n");
+        builder.append("the loser is the player who is on turn, but doesn't have any possible moves\n");
+
+        return builder.toString();
     }
 }
